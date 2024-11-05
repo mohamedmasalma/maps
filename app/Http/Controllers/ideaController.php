@@ -49,7 +49,8 @@ class ideaController extends Controller
 
      $idea = new idea(["comment"=>request()->get('idea'),"likes"=>2]);
      $idea->save();
-     return redirect(route("ideas.main"))->with("success","the idea was created");
+
+     return redirect()->route("ideas.main")->with("success","the idea was created");
 
      }
 
