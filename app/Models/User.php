@@ -23,11 +23,6 @@ class User extends Authenticatable
         'password',
     ];
 
-    protected $casts = [
-        //'id'=>'string',
-      // 'name'=>'array'
-    ];
-
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -38,6 +33,15 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    public function ideas(){
+        return $this->hasMany(idea::class);
+    }
+
+    public function comments(){
+        return $this->hasMany(Comment::class);
+    }
+
+
     /**
      * Get the attributes that should be cast.
      *
@@ -47,8 +51,7 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
-           'password' => 'hashed',
-
+            'password' => 'hashed',
         ];
     }
 }

@@ -7,4 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 class Comment extends Model
 {
 
+    public function user(){
+        return $this->belongsTo(user::class);
+    }
+
+    public function idea(){
+        return $this->belongsTo(idea::class);
+    }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\idea;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ideaController extends Controller
 {
@@ -24,6 +25,7 @@ class ideaController extends Controller
         }
 
     public function update(idea $idea){
+
 
         request()->validate(
             [
@@ -47,7 +49,7 @@ class ideaController extends Controller
     ]);
 
 
-     $idea = new idea(["comment"=>request()->get('idea'),"likes"=>2]);
+     $idea = new idea(["comment"=>request()->get('idea'),"likes"=>2,"user_id"=>Auth::id()]);
      $idea->save();
 
      return redirect()->route("ideas.main")->with("success","the idea was created");

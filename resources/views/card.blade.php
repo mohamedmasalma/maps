@@ -4,9 +4,9 @@
             <div class="d-flex align-items-center">
 
                 <img style="width:50px" class="me-2 avatar-sm rounded-circle"
-                    src="https://api.dicebear.com/6.x/fun-emoji/svg?seed=Mario" alt="Mario Avatar">
+                    src="https://api.dicebear.com/6.x/fun-emoji/svg?seed={{$idea->user->name}}" alt="Mario Avatar">
                 <div>
-                    <h5 class="card-title mb-0"><a href="#">Mohammad
+                    <h5 class="card-title mb-0"><a href={{route("users.show",$idea->user->id)}}>{{$idea->user->name}}
                         </a></h5>
 
                 </div>
@@ -16,8 +16,13 @@
                     @csrf
                     @method('delete')
                     <a href={{ route('ideas.show', $idea->id) }}>view</a>
-                    <a class="mx-2" href={{ route('ideas.edit', $idea->id) }}> edit</a>
+
+                    @if ($idea->user->id===Auth::id())
+                       <a class="mx-2" href={{ route('ideas.edit', $idea->id) }}> edit</a>
                     <button class="btn btn-danger btn-sm" type="submit">x</button>
+                    @endif
+
+
                 </form>
             </div>
 
@@ -49,7 +54,7 @@
             </div>
             <div>
                 <span class="fs-6 fw-light text-muted"> <span class="fas fa-clock"> </span>
-                    3-5-2023 </span>
+                {{ $idea->created_at }} </span>
             </div>
         </div>
 

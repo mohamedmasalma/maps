@@ -51,7 +51,7 @@ Route::get("/logout",[AuthController::class,"logout"])->name("logout");
 Route::get("/users/{user}",[UserController::class,"show"])->name("users.show");
 
 Route::get("/users/{user}/edit",[UserController::class,"edit"])->name("users.edit");
-
+///////
 
 
 
