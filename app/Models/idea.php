@@ -9,7 +9,7 @@ class idea extends Model
 
     protected $fillable =
      [
-        "comment","likes",
+        "comment","likes","user_id",
     ];
 
     public function comments(){

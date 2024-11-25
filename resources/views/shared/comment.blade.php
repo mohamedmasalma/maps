@@ -1,5 +1,5 @@
 <div>
-    <form action={{ route('ideas.comment.store', $idea->id) }} method="post">
+    <form action={{ route('ideas.comments.store', $idea->id) }} method="post">
         @csrf
 
         @auth
@@ -18,7 +18,7 @@
     @foreach ($idea->comments as $comment)
         <div class="d-flex align-items-start">
             <img style="width:35px" class="me-2 avatar-sm rounded-circle"
-                src="https://api.dicebear.com/6.x/fun-emoji/svg?seed={{ $comment->user->name }}" alt="Luigi Avatar">
+                src={{$comment->user->getImageURL()}} alt="Luigi Avatar">
             <div class="w-100">
                 <div class="d-flex justify-content-between">
                     <h6 class="">{{ $comment->user->name }}

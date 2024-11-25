@@ -3,16 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Auth\Events\Validated;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-   public function index(){
 
-   }
+
 
     /**
      * Show the form for creating a new resource.
@@ -35,23 +33,48 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-      return view("user.profile",["user"=>$user]);
+
+
+        return view("user.profile",["user"=>$user]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(User $user)
     {
-        //
+
+        return view("user.edit_user",["user"=>$user]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(User $user)
     {
-        //
+       $validated= request()->validate(
+            [
+
+                "name"=>"required|min:3|max:20",
+                "bio"=>"min:3|max:199",
+                "image"=>"image"
+            ]
+            );
+
+            if(request()->has("image")){
+
+                Storage::disk("public")->delete($user->image ?? "");
+
+             $user->image=request()->file("image")->store("user_image","public");
+               $user->save;
+
+            }
+
+
+                $user->update(["name"=>$validated["name"],"bio"=>$validated["bio"]]);
+
+
+       return view("user.profile",["user"=>$user]);
     }
 
     /**
