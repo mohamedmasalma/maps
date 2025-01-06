@@ -11,20 +11,30 @@
 
                     @guest
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href={{route("login")}}>Login</a>
+                        <a class="nav-link {{Route::is("login") ? "active" : ""}}" aria-current="page" href={{route("login")}}>Login</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href={{route("register")}}>Register</a>
+                        <a class="nav-link {{Route::is("register") ? "active" : ""}}" href={{route("register")}}>Register</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href={{route('ideas.main')}}>profile</a>
+                        <a class="nav-link {{Route::is("ideas.main") ? "active" : ""}}" href={{route('ideas.main')}}>profile</a>
                     </li>
                     @endguest
 
                     @auth
                     <li class="nav-item">
-                        <a class="nav-link" href={{route("users.show",Auth::id())}}>{{Auth::user()->name}}</a>
+                        <a class="nav-link {{Route::is("users.show") ? "active" : ""}} " href={{route("users.show",Auth::id())}}>{{Auth::user()->name}}</a>
                     </li>
+                    @can("admin")
+                     <li class="nav-item">
+                        <a class="nav-link
+                       {{ in_array(Route::currentRouteName(),
+                       ['admin.main', 'admin.users.index', 'admin.ideas.index','admin.comments.index'])
+                        ? "active" : ""}} "
+                        href={{route("admin.main",Auth::id())}}>Admin Panel</a>
+                    </li>
+                    @endcan
+
                     <li class="nav-item">
                         <form action={{route("logout")}} method="get">
                             @csrf

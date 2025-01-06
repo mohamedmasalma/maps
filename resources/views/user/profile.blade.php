@@ -17,11 +17,11 @@
                         <span class="fs-6 text-muted">"{{ $user->email }}"</span>
                     </div>
                 </div>
-                @auth
-                    @if ($user->id === Auth::id())
-                        <a href={{ route('users.edit', $user->id) }}>edit</a>
-                    @endif
-                @endauth
+               @can("update",$user)
+                    <a href={{ route('users.edit', $user->id) }}>edit</a>
+               @endcan
+
+
             </div>
             <div class="px-2 mt-4">
                 <h5 class="fs-5"> Bio : </h5>
@@ -32,7 +32,7 @@
 
                 <div class="d-flex justify-content-start">
                     <a href="#" class="fw-light nav-link fs-6 me-3"> <span class="fas fa-user me-1">
-                        </span> 120 Followers </a>
+                        </span> {{$user->followers()->count()}} Followers </a>
                     <a href="#" class="fw-light nav-link fs-6 me-3"> <span class="fas fa-brain me-1">
                         </span> {{ $user->ideas()->count() }}</a>
                     <a href="#" class="fw-light nav-link fs-6"> <span class="fas fa-comment me-1">
@@ -40,22 +40,20 @@
                 </div>
 
                 @auth
+                @if (Auth::user()->id !== $user->id)
+                @if (Auth::user()->follows($user))
 
 
-                 @if(Auth::user()->id !== $user->id)
 
-                    @if(Auth::user()->follows($user))
+                <div class="mt-3">
+                    <form action={{route("users.unfollow",$user->id)}} method="post">
+                        @csrf
+                    <button type="submit" class="btn btn-danger btn-sm"> Unfollow </button>
+                    </form>
+                </div>
 
-                    <div class="mt-3">
-
-                        <form action={{route("users.unfollow",$user->id)}} method="post">
-                            @csrf
-                        <button type="submit" class="btn btn-danger btn-sm"> unfollow </button>
-                        </form>
-                    </div>
-                    @else
+                   @else
                         <div class="mt-3">
-
                             <form action={{route("users.follow",$user->id)}} method="post">
                                 @csrf
                             <button type="submit" class="btn btn-primary btn-sm"> Follow </button>
@@ -69,4 +67,6 @@
         </div>
     </div>
     <hr>
+
+
 @endsection

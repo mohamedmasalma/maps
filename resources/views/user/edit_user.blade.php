@@ -22,11 +22,9 @@
                     <span class="fs-6 text-muted">"{{$user->email}}"</span>
                 </div>
             </div>
-            @auth
-            @if ($user->id === Auth::id())
-            <a href={{route("users.show",$user->id)}}>view</a>
-            @endif
-            @endauth
+          @can("update",$user)
+               <a href={{route("users.show",$user->id)}}>view</a>
+          @endcan
         </div>
         <div class="mt-3">
             <label for="image">profile picture</label>

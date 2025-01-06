@@ -3,10 +3,11 @@
         <div class="d-flex align-items-center justify-content-between">
             <div class="d-flex align-items-center">
 
-                <img style="width:50px" class="me-2 avatar-sm rounded-circle"
-                    src={{$idea->user->getImageURL()}} alt="Mario Avatar">
+                <img style="width:50px" class="me-2 avatar-sm rounded-circle" src={{ $idea->user->getImageURL() }}
+                    alt="Mario Avatar">
                 <div>
-                    <h5 class="card-title mb-0"><a href={{route("users.show",$idea->user->id)}}>{{$idea->user->name}}
+                    <h5 class="card-title mb-0"><a
+                            href={{ route('users.show', $idea->user->id) }}>{{ $idea->user->name }}
                         </a></h5>
 
                 </div>
@@ -17,10 +18,11 @@
                     @method('delete')
                     <a href={{ route('ideas.show', $idea->id) }}>view</a>
 
-                    @if ($idea->user->id===Auth::id())
-                       <a class="mx-2" href={{ route('ideas.edit', $idea->id) }}> edit</a>
-                    <button class="btn btn-danger btn-sm" type="submit">x</button>
-                    @endif
+                    @can("edit",$idea)
+                        <a class="mx-2" href={{ route('ideas.edit', $idea->id) }}> edit</a>
+                        <button class="btn btn-danger btn-sm" type="submit">x</button>
+                    @endcan
+
 
 
                 </form>
@@ -32,6 +34,7 @@
         @if ($editing ?? false)
             <form action={{ route('ideas.update', $idea->id) }} method="POST">
                 @csrf
+
 
                 <textarea name="idea" class="form-control" id="idea" rows="3">{{ $idea->comment }}</textarea>
                 @error('idea')
@@ -49,12 +52,36 @@
 
         <div class="d-flex justify-content-between">
             <div>
-                <a href="#" class="fw-light nav-link fs-6"> <span class="fas fa-heart me-1">
-                    </span> {{ $idea->likes }} </a>
+                @auth
+                    @if (Auth::user()->does_like($idea))
+                        <form action="{{ route('ideas.unlike', $idea->id) }}" method="post">
+                            @csrf
+                            <button type="submit" class="fw-light nav-link fs-6"> <span class="fas fa-heart me-1">
+                                </span> {{ $idea->likes_count}} </button>
+                        </form>
+                    @else
+                        <form action="{{ route('ideas.like', $idea->id) }}" method="post">
+                            @csrf
+                            <button type="submit" class="fw-light nav-link fs-6"> <span class="far fa-heart me-1">
+                                </span> {{ $idea->likes_count}} </button>
+                        </form>
+                    @endif
+                @endauth
+                @guest
+                    <form action="{{ route('ideas.like', $idea->id) }}" method="post">
+                        @csrf
+                        <button type="submit" class="fw-light nav-link fs-6"> <span class="far fa-heart me-1">
+                            </span> {{ $idea->likes_count }} </button>
+                    </form>
+
+                @endguest
+
+
+
             </div>
             <div>
                 <span class="fs-6 fw-light text-muted"> <span class="fas fa-clock"> </span>
-                {{ $idea->created_at }} </span>
+                    {{ $idea->created_at->diffForHumans() }} </span>
             </div>
         </div>
 

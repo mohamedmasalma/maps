@@ -6,11 +6,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
+use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, HasApiTokens;
+
+
+
 
     /**
      * The attributes that are mass assignable.
@@ -36,37 +41,53 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-     // Define the mutator for the 'email' attribute
+    // Define the mutator for the 'email' attribute
     /* public function setnameAttribute($value)
      {
          $this->attributes['name'] = strtolower($value);
     }
     */
-    public function ideas(){
-        return $this->hasMany(idea::class);
+    public function ideas()
+    {
+        return $this->hasMany(Idea::class);
     }
 
-    public function comments(){
+    public function comments()
+    {
         return $this->hasMany(Comment::class);
     }
 
 
-    public function followings(){
+    public function followings()
+    {
 
-        return $this->belongsToMany(User::class,"follower_user","follower_id","followee_id")->withTimestamps();
-
+        return $this->belongsToMany(User::class, "follower_user", "follower_id", "followee_id")->withTimestamps();
     }
-    public function followers(){
+    public function followers()
+    {
 
-        return $this->belongsToMany(User::class,"follower_user","followee_id","follower_id")->withTimestamps();
-    }
-
-    public function follows(User $user){
-
-     $this->followings()->where("followee_id",$user->id)->exists();
+        return $this->belongsToMany(User::class, "follower_user", "followee_id", "follower_id")->withTimestamps();
     }
 
-    public function tests(){
+    public function follows(User $user)
+    {
+
+        return $this->followings()->where("followee_id", $user->id)->exists();
+    }
+
+
+    public function likes()
+    {
+        return $this->belongsToMany(idea::class, "idea_like");
+    }
+
+    public function does_like(idea $idea)
+    {
+        return $this->likes()->where("idea_id", $idea->id)->exists();
+    }
+
+    public function tests()
+    {
         return $this->hasMany(Test::class);
     }
 
@@ -84,16 +105,15 @@ class User extends Authenticatable
     }
 
 
-    public function getImageURL(){
+    public function getImageURL()
+    {
 
-        if($this->image){
+        if ($this->image) {
 
-            return url("/storage/".$this->image);
-
+            return url("/storage/" . $this->image);
         }
 
         return "https://api.dicebear.com/6.x/fun-emoji/svg?seed={$this->name}";
-
     }
 
 

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\idea;
+use App\Models\Idea;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -10,17 +10,16 @@ class welcomeController extends Controller
 {
     function welcomFunction(){
 
-        $ideas=idea::orderBy('created_at',"DESC");
-        $users=User::all();
+        $ideas=Idea::when(request()->has("search"),function($ideas){
+            $ideas->search(request("search",""));
+        })->orderBy('created_at',"DESC")->paginate(5);
 
-        if(request()->has("search")){
+        return view("welcome",["ideas"=>$ideas]);
 
-            $ideas->where("comment","like","%".request()->get("search")."%");
-        }
+    }
 
-
-        return view("welcome",["ideas"=>$ideas->paginate(3),"users"=>$users]);
-
+    public function show_terms(){
+        return view("terms");
     }
 
 

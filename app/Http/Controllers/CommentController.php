@@ -3,13 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Comment;
-use App\Models\idea;
+use App\Models\Idea;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class CommentController extends Controller
 {
-    public function store(idea $idea){
+    public function store(Idea $idea){
 
         request()->validate([
             "comment"=>"required"

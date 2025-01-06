@@ -1,5 +1,5 @@
 @extends('shared.base')
-
+@section("title","home page")
 @section('content')
 @include('success_meassage')
     @include('submit_idea')
@@ -8,6 +8,7 @@
         <div class="mt-3">
             @include('card')
         </div>
+
         @empty
         <p class="text-center mt-3">no records</p>
     @endforelse

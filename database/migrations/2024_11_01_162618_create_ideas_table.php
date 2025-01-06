@@ -15,8 +15,6 @@ return new class extends Migration
             $table->id();
             $table->string('comment');
             $table->foreignId("user_id")->constrained()->cascadeOnDelete();
-            $table->unsignedInteger('likes')->default(0);
-
             $table->timestamps();
         });
     }

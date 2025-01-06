@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UserUpdateRequest;
 use App\Models\User;
 use Illuminate\Auth\Events\Validated;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
@@ -35,7 +37,7 @@ class UserController extends Controller
     {
 
 
-        return view("user.profile",["user"=>$user]);
+        return view("user.profile", ["user" => $user]);
     }
 
     /**
@@ -43,38 +45,32 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
+        Gate::authorize("update", $user);
 
-        return view("user.edit_user",["user"=>$user]);
+        return view("user.edit_user", ["user" => $user]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(User $user)
+    public function update(UserUpdateRequest $request, User $user)
     {
-       $validated= request()->validate(
-            [
+        Gate::authorize("update", $user);
+        $validated = $request->validated();
 
-                "name"=>"required|min:3|max:20",
-                "bio"=>"min:3|max:199",
-                "image"=>"image"
-            ]
-            );
+        if ($request->has("image")) {
 
-            if(request()->has("image")){
+            Storage::disk("public")->delete($user->image ?? "");
 
-                Storage::disk("public")->delete($user->image ?? "");
-
-             $user->image=request()->file("image")->store("user_image","public");
-               $user->save;
-
-            }
+            $user->image = $request->file("image")->store("user_image", "public");
+            $user->save;
+        }
 
 
-                $user->update(["name"=>$validated["name"],"bio"=>$validated["bio"]]);
+        $user->update(["name" => $validated["name"], "bio" => $validated["bio"]]);
 
 
-       return view("user.profile",["user"=>$user]);
+        return view("user.profile", ["user" => $user]);
     }
 
     /**

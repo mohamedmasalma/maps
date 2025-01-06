@@ -12,12 +12,16 @@ class followController extends Controller
 
 
         $follower = Auth::user();
-        $follower->followers()->attach($user);
+        //was followers
+        $follower->followings()->attach($user);
         return redirect()->route("users.show",$user->id);
 
     }
 
-    public function unfollow(){
+    public function unfollow(User $user){
+        $follower = Auth::user();
+        $follower->followings()->detach($user);
+        return redirect()->route("users.show",$user->id);
 
     }
 }
