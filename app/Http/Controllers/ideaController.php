@@ -44,8 +44,6 @@ class ideaController extends Controller
 
     public function store()
     {
-
-
         request()->validate([
 
             "idea" => "required|min:3|max:100"

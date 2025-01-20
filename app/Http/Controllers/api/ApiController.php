@@ -2,8 +2,15 @@
 
 namespace App\Http\Controllers\api;
 
+use Spatie\ArrayToXml\ArrayToXml;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\IdeaResource;
+use App\Models\Idea;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 class ApiController extends Controller
 {
@@ -12,7 +19,9 @@ class ApiController extends Controller
      */
     public function index()
     {
-        //
+        $idea =IdeaResource::collection(Idea::get());
+
+        return $idea ;
     }
 
     /**
@@ -20,7 +29,35 @@ class ApiController extends Controller
      */
     public function store(Request $request)
     {
-        //
+       $validation = Validator::make($request->all(),
+       [
+           "comment"=>"required|min:3",
+            "email"=>"required|email",
+            "password"=>"required"
+
+        ]);
+
+        if($validation->fails()){
+            return response()->json(["message"=>$validation->messages()]);
+        }
+        else{
+
+           $user = User::where("email",$request->email)->first();
+
+           if($user && Hash::check($request->password, $user->password)){
+
+            $idea =new Idea();
+            $idea->create(["comment" => $request->comment, "user_id" => $user->id]);
+
+            return response()->json(["message"=>"idea was created","idea"=>new IdeaResource($idea)]);
+
+           }
+           else{
+            return response()->json(["message"=>"no matched records"]);
+           }
+        }
+
+
     }
 
     /**
@@ -28,7 +65,7 @@ class ApiController extends Controller
      */
     public function show(string $id)
     {
-        //
+        return "hi from show";
     }
 
     /**

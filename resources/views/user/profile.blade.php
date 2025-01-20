@@ -68,5 +68,14 @@
     </div>
     <hr>
 
+    @forelse($user->ideas as $idea)
+    <div class="mt-3">
+        @include('card')
+    </div>
+
+    @empty
+    <p class="text-center mt-3">no records</p>
+   @endforelse
+
 
 @endsection

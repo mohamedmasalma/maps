@@ -3,11 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Request;
 
 class Idea extends Model
 {
+    use HasFactory;
 
 
     protected $with =
@@ -27,6 +29,7 @@ class Idea extends Model
         "comment",
         "user_id",
     ];
+
 
     public function comments()
     {
