@@ -3,18 +3,17 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class TestController extends Controller
 {
-    public function show(){
-        return view("test");
-    }
 
-    public function store(){
 
-       $test= request()->validate([
-            "content"=>"required|min:3|max:100"
-        ]);
+    public function sendDailyReport()
+    {
+        // Your logic to send the daily report
+        Log::info('Sending daily report...');
+        // E.g., Send emails, generate reports, etc
 
 
     }

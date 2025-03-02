@@ -7,8 +7,10 @@
     "require": {
         "php": "^8.2",
         "laravel/framework": "^11.9",
+        "laravel/reverb": "^1.0",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.10",
+        "pusher/pusher-php-server": "^7.2",
         "spatie/array-to-xml": "^3.4"
     },
     "require-dev": {
@@ -17,6 +19,7 @@
         "laravel/pail": "^1.1",
         "laravel/pint": "^1.13",
         "laravel/sail": "^1.26",
+        "laravel/telescope": "^5.5",
         "mockery/mockery": "^1.6",
         "nunomaduro/collision": "^8.1",
         "pestphp/pest": "^3.5",

@@ -19,7 +19,7 @@ class ApiController extends Controller
      */
     public function index()
     {
-        $idea =IdeaResource::collection(Idea::get());
+        $idea =IdeaResource::collection(Idea::take(5)->get());
 
         return $idea ;
     }
@@ -65,7 +65,9 @@ class ApiController extends Controller
      */
     public function show(string $id)
     {
-        return "hi from show";
+        $idea=Idea::where("id",$id)->get();
+        $data= IdeaResource::collection($idea);
+        return $data;
     }
 
     /**
@@ -73,8 +75,9 @@ class ApiController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+
     }
+
 
     /**
      * Remove the specified resource from storage.

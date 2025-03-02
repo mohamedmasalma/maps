@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\sendEmailJob;
 use App\Mail\WelcomeEmail;
 use App\Mail\welcomeMail;
 use App\Models\User;
@@ -33,7 +34,7 @@ class AuthController extends Controller
                 "password"=>Hash::make($validated["password"])
             ]);
 
-            Mail::to($user->email)->send(new welcomeMail($user));
+           sendEmailJob::dispatch();
 
 
 

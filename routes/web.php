@@ -1,10 +1,12 @@
 <?php
 
+use App\Events\TestEvent;
 use App\Http\Controllers\admin\UsersController;
 use App\Http\Controllers\admin\adminControllPannelContoller;
 use App\Http\Controllers\admin\CommentController as AdminCommentController;
 use App\Http\Controllers\admin\IdeaController as AdminIdeaController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\feedController;
 use App\Http\Controllers\followController;
@@ -16,6 +18,7 @@ use App\Http\Controllers\welcomeController;
 use App\Http\Middleware\is_user_admin;
 use App\Http\Middleware\setLang;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
 
 // check this https://laravel.com/docs/10.x/controllers#resource-controllers
@@ -101,3 +104,5 @@ Route::middleware(["auth","can:admin"])->prefix("/admin")->as("admin.")->group(f
     Route::resource('/comments',AdminCommentController::class)->only("index","destroy");
 });
 
+Route::get("/chat/{user}",[ChatController::class,"chatForm"]);
+Route::post("/chat/{user}",[ChatController::class,"sendMessage"])->name("chat");

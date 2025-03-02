@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\EmailSending;
+use App\Events\UserRegistered;
 use App\Models\Idea;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -13,6 +15,7 @@ class welcomeController extends Controller
         $ideas=Idea::when(request()->has("search"),function($ideas){
             $ideas->search(request("search",""));
         })->orderBy('created_at',"DESC")->paginate(5);
+
 
         return view("welcome",["ideas"=>$ideas]);
 

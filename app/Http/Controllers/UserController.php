@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\UserVisited;
 use App\Http\Requests\UserUpdateRequest;
 use App\Models\User;
 use Illuminate\Auth\Events\Validated;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 
@@ -35,7 +37,10 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-
+        $visitor =Auth::user();
+        if($visitor AND $visitor->id != $user->id){
+                event(new UserVisited($user,$visitor));
+        }
         return view("user.profile", ["user" => $user]);
     }
 

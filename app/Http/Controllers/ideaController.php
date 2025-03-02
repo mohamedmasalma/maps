@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\AlertEvent;
+use App\Events\broadCast;
 use App\Models\Idea;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -53,6 +55,8 @@ class ideaController extends Controller
 
         $idea = new idea(["comment" => request()->get('idea'), "user_id" => Auth::id()]);
         $idea->save();
+
+            broadcast(new broadCast($idea->user));
 
         return redirect()->route("ideas.main")->with("success", "the idea was created");
     }
